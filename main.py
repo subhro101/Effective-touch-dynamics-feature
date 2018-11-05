@@ -8,8 +8,8 @@ from sklearn.ensemble import IsolationForest
 import varience_threshold as vt
 import pca as pca
 import minimum_subset as ms
-# Other 1
-# Other 2
+import chi_square as cs
+import information_gain as ig
 
 # Load the dataset
 
@@ -21,6 +21,8 @@ pca_threshold_features = []
 minimum_subset_features = []
 other_algo_1_features = []
 other_algo_2_features = []
+
+# Take the intersection of the features
 
 # Extract test, train from k-fold k=5 validation
 
@@ -35,4 +37,4 @@ other_algo_2_features = []
 
 # Plot results
 
-# Select best
+# Record/Output Data
