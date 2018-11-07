@@ -12,6 +12,15 @@ import chi_square as cs
 import information_gain as ig
 
 # Load the dataset
+raw_data = []
+raw_data_ids
+files = os.listdir('keystroke_data/')
+id_count = 0
+for f in files:
+    temp = pd.read_csv('keystroke_data/' + fi, header=None)
+    raw_data.append(temp)
+    raw_data_ids.extend([id_count] * len(temp.index))
+    raw_data_ids +=1
 
 # Perform Isolation Forest for outlier detection
 
