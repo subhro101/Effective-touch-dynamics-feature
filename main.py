@@ -2,10 +2,14 @@
 
 ## Import required libraries
 import os
+import sys
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.ensemble import IsolationForest
+from sklearn.model_selection import StratifiedKFold
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.neighbors import KNeighborsClassifier
 
 ## Import the 5 feature selection algorithms
 import varience_threshold as vt
@@ -14,9 +18,14 @@ import minimum_subset as ms
 import chi_square as cs
 import information_gain as ig
 
+## Import outlier detection system
+import outlier_detection_system as ods
+
 ## GLobal Variables
 train_percent = .75
 dataset_path = "dataset1/data/"
+k_folds = 5
+k_neighbors = 7
 
 ## Load the dataset
 raw_data = []
@@ -28,46 +37,10 @@ for f in files:
     raw_data.append(temp)
     raw_data_ids.extend([ids]*len(temp.index))    
     ids+=1
+raw_data = pd.concat(raw_data, axis=0).values
+raw_data_ids = np.array(raw_data_ids)
 
-## Perform Isolation Forest for outliers detection
-clf = IsolationForest(behaviour='new', contamination='auto')
-refined_train = []
-refined_train_ids = []
-refined_query = []
-refined_query_ids = []
-
-# for every file i.e. every user
-for index, person in enumerate(raw_data):
-	# Get chunk of data that will be for training, rest is query
-    end = np.ceil(len(person) * train_percent).astype('int')
-    train_temp = person.loc[:end, :]
-
-    # Set aside query data
-    for test_row_index in range(end, len(train_temp)):
-    	query_row = train_temp[test_row_index]
-    	query_row = np.array(query_row).reshape(1, -1)
-    	refined_query.append(query_row)
-    	refined_query_ids.append(raw_data_ids[index * len(person) + test_row_index])
-
-    for train_row_index in range(end):
-    	# Get training and testing rows
-        test_row = train_temp[train_row_index]
-        test_row = np.array(test_row).reshape(1, -1)
-        training_rows = []
-        for t in range(end):
-        	if t != train_row_index:
-        		training_rows.append(train_temp[t])
-
-        # Prepare and use isolation forest
-        clf.fit(training_rows)
-        predict = clf.predict(test_row)
-
-        # Add row if not an outliers
-        if predict == 1:
-            refined_train.append(test_row)
-            refined_train_ids.append(raw_data_ids[index * len(person) + train_row_index])
-
-# # Perform feature selection
+## Perform feature selection
 # varience_threshold_features = []
 # pca_threshold_features = []
 # minimum_subset_features = []
@@ -80,16 +53,37 @@ for index, person in enumerate(raw_data):
 # features = features.intersection(chi_square_features)
 # features = features.intersection(information_gain_features)
 
-# Extract test, train from k-fold k=5 validation
 
-# For each feature set
+## Perform cross validation
+kf = StratifiedKFold(n_splits=k_folds)
+scaler = MinMaxScaler()
+clf = KNeighborsClassifier(n_neighbors=k_neighbors)
+for train, test in kf.split(raw_data, raw_data_ids):
 
-    # Train on train
+    # Get current folds data
+    accuracy = 0.
+    template = raw_data[train, :]
+    template_ids = raw_data_ids[train]
+    
+    # Remove outliers from training data
+    template, template_ids = ods.remove_outliers(template, template_ids)
 
-    # Test on test
+    # Scale data
+    template = scaler.fit_transform(template)
 
-    # Compute results
+    # Train on data
+    clf.fit(template, template_ids)
 
+    # Test on data
+    for test_index in range(len(test)):
+
+        # Get and Scale query
+        query = template[test[test_index], :].reshape(1, -1)
+        query = scaler.fit_transform(query)
+
+        # Prefict and record
+        prediction = clf.predict(query)
+        accuracy += prediction
 
 # Plot results
 
