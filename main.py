@@ -18,7 +18,6 @@ import minimum_subset as ms
 import chi_square as cs
 import information_gain as ig
 
-
 ## Import outliers detection system
 import outlier_detection_system as ods
 
@@ -37,7 +36,7 @@ for f in files:
     temp = pd.read_csv(dataset_path + f, header=None)
     raw_data.append(temp)
     raw_data_ids.extend([ids]*len(temp.index))    
-    ids+=1
+    ids += 1
     if ids == 3:
         break
 raw_data = pd.concat(raw_data, axis=0).values
@@ -84,7 +83,7 @@ for train, test in kf.split(raw_data, raw_data_ids):
     template_ids = raw_data_ids[train]
 
     # Remove outliers from training data
-    template, template_ids = ods.remove_outliers(template, template_ids)
+    #template, template_ids = ods.remove_outliers(template, template_ids)
 
     # Scale data
     template = scaler.fit_transform(template)

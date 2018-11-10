@@ -22,7 +22,7 @@ def plot_scoreDist(gen_scores, imp_scores):
 def plot_det(far, frr):
     #compute eer
     far_minus_frr = 1
-    for i,j in zip(far, frr):
+    for i, j in zip(far, frr):
         if abs(i-j) < far_minus_frr:
             eer = i
             far_minus_frr = abs(i-j)
