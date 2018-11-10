@@ -6,8 +6,7 @@ import sys
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from sklearn.ensemble import IsolationForest
-from sklearn.model_selection import StratifiedKFold
+from sklearn.model_selection import KFold
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.neighbors import KNeighborsClassifier
 from performance import perf_main
@@ -19,14 +18,15 @@ import minimum_subset as ms
 import chi_square as cs
 import information_gain as ig
 
-## Import outlier detection system
-import outlie_detection_system as ods
+
+## Import outliers detection system
+import outlier_detection_system as ods
 
 ## GLobal Variables
 train_percent = .75
 dataset_path = "dataset1/data/"
 k_folds = 5
-k_neighbors = 7
+k_neighbors = 15
 
 ## Load the dataset
 raw_data = []
@@ -38,10 +38,15 @@ for f in files:
     raw_data.append(temp)
     raw_data_ids.extend([ids]*len(temp.index))    
     ids+=1
+    if ids == 3:
+        break
 raw_data = pd.concat(raw_data, axis=0).values
 raw_data_ids = np.array(raw_data_ids)
 
 stat, p, dof, expected = cs.chi_square(raw_data)
+
+print("Total number of raw rows: ", len(raw_data))
+
 ## Perform feature selection
 # varience_threshold_features = []
 # pca_threshold_features = []
@@ -57,6 +62,9 @@ chi_square_features = expected
 # features = features.intersection(chi_square_features)
 # features = features.intersection(information_gain_features)
 
+# # Remove the unused features from raw_data
+
+## Perform cross validation
 
 # Instantiate scikit clfs
 kf = KFold(n_splits=k_folds, shuffle=True)
@@ -104,7 +112,7 @@ for train, test in kf.split(raw_data, raw_data_ids):
             impostor_scores.append(np.mean(confidence))
 
     # DEBUG
-    print('Fold accuracy: ' + str(accuracy / len(test)))
+    print('Fold accuracy: ' + str(accuracy / len(test)))        
     total_accuracy += accuracy / len(test)
 
 # Plot results

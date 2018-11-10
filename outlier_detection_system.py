@@ -1,4 +1,6 @@
 ## Outlier detection implemented with Isolation Forest
+
+# Import required Libraries
 import numpy as np
 from sklearn.ensemble import IsolationForest
 
