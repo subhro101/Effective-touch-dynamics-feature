@@ -1,14 +1,17 @@
 ## Outlier detection implemented with Isolation Forest
+# Import required Libraries
+import numpy as np
+from sklearn.ensemble import IsolationForest
 
 def remove_outliers(template, template_ids):
 
     # Set variables
     refined_data = []
     refined_ids = []
-    clf = IsolationForest(behavior='new', contamination='auto')
+    clf = IsolationForest(behaviour='new', contamination='auto')
 
     # DEBUG
-    print("Template size: ", len(template))
+    print("Performing Outlier Removal\nTemplate size: ", len(template))
     count = 0
 
     # Perform leave out validation to remove outliers
@@ -16,7 +19,12 @@ def remove_outliers(template, template_ids):
 
         # Get current iteration variables
         leave_out_row = template[leave_out]
-        every_other_row = [row for row in range(len(template)) if row != leave_out]
+        leave_out_row = leave_out_row.reshape(1,-1)
+
+        every_other_row = []
+        for i in range(len(template)):
+            if i != leave_out:
+                every_other_row.append(template[i])
 
         # Train and predict
         clf.fit(every_other_row)
@@ -25,10 +33,10 @@ def remove_outliers(template, template_ids):
         # Save row if not outlier
         if prediction == 1:
             refined_data.append(template[leave_out])
-            refined_data.append(template_ids[leave_out])
+            refined_ids.append(template_ids[leave_out])
             count += 1
 
-    print("Added: " count)
+    print("Rows Kept: ", count)
 
     return refined_data, refined_ids
 
