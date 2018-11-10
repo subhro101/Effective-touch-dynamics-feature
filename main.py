@@ -10,6 +10,7 @@ from sklearn.ensemble import IsolationForest
 from sklearn.model_selection import StratifiedKFold
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.neighbors import KNeighborsClassifier
+from performance import perf_main
 
 ## Import the 5 feature selection algorithms
 import varience_threshold as vt
@@ -19,7 +20,7 @@ import chi_square as cs
 import information_gain as ig
 
 ## Import outlier detection system
-import outlier_detection_system as ods
+import outlie_detection_system as ods
 
 ## GLobal Variables
 train_percent = .75
@@ -40,11 +41,14 @@ for f in files:
 raw_data = pd.concat(raw_data, axis=0).values
 raw_data_ids = np.array(raw_data_ids)
 
+stat, p, dof, expected = cs.chi_square(raw_data)
 ## Perform feature selection
 # varience_threshold_features = []
 # pca_threshold_features = []
 # minimum_subset_features = []
-# chi_square_features = []
+
+# dataType is ndarray
+chi_square_features = expected
 # information_gain_features = []
 
 # # Take the intersection of the features
@@ -54,17 +58,23 @@ raw_data_ids = np.array(raw_data_ids)
 # features = features.intersection(information_gain_features)
 
 
-## Perform cross validation
-kf = StratifiedKFold(n_splits=k_folds)
+# Instantiate scikit clfs
+kf = KFold(n_splits=k_folds, shuffle=True)
 scaler = MinMaxScaler()
 clf = KNeighborsClassifier(n_neighbors=k_neighbors)
+
+# Set aside performance variables
+genuine_scores = []
+impostor_scores = []
+total_accuracy = 0.
+
 for train, test in kf.split(raw_data, raw_data_ids):
 
     # Get current folds data
     accuracy = 0.
     template = raw_data[train, :]
     template_ids = raw_data_ids[train]
-    
+
     # Remove outliers from training data
     template, template_ids = ods.remove_outliers(template, template_ids)
 
@@ -78,13 +88,31 @@ for train, test in kf.split(raw_data, raw_data_ids):
     for test_index in range(len(test)):
 
         # Get and Scale query
-        query = template[test[test_index], :].reshape(1, -1)
+        query = raw_data[test[test_index], :].reshape(1, -1)
         query = scaler.fit_transform(query)
+        query_label = raw_data_ids[test[test_index]]
+        print(query_label)
 
-        # Prefict and record
+        # Predict and record
         prediction = clf.predict(query)
-        accuracy += prediction
+        confidence = clf.predict_proba(query)
+
+        if prediction == query_label:
+            accuracy += 1
+            genuine_scores.append(np.mean(confidence))
+        else:
+            impostor_scores.append(np.mean(confidence))
+
+    # DEBUG
+    print('Fold accuracy: ' + str(accuracy / len(test)))
+    total_accuracy += accuracy / len(test)
 
 # Plot results
-
+total_accuracy = total_accuracy / k_folds
+print(genuine_scores[0])
+print(total_accuracy)
+print(genuine_scores)
+print(impostor_scores)
 # Record/Output Data
+# Courtesy of Dr. Tempest Neil
+perf_main(genuine_scores, impostor_scores)
