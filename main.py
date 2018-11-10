@@ -36,11 +36,13 @@ for f in files:
     temp = pd.read_csv(dataset_path + f, header=None)
     raw_data.append(temp)
     raw_data_ids.extend([ids]*len(temp.index))    
-    ids+=1
+    ids += 1
     if ids == 3:
         break
 raw_data = pd.concat(raw_data, axis=0).values
 raw_data_ids = np.array(raw_data_ids)
+
+stat, p, dof, expected = cs.chi_square(raw_data)
 
 print("Total number of raw rows: ", len(raw_data))
 
@@ -48,7 +50,9 @@ print("Total number of raw rows: ", len(raw_data))
 # varience_threshold_features = []
 # pca_threshold_features = []
 # minimum_subset_features = []
-# chi_square_features = []
+
+# dataType is ndarray
+chi_square_features = expected
 # information_gain_features = []
 
 # # Take the intersection of the features
@@ -59,8 +63,8 @@ print("Total number of raw rows: ", len(raw_data))
 
 # # Remove the unused features from raw_data
 
-
 ## Perform cross validation
+
 # Instantiate scikit clfs
 kf = KFold(n_splits=k_folds, shuffle=True)
 scaler = MinMaxScaler()
@@ -77,9 +81,9 @@ for train, test in kf.split(raw_data, raw_data_ids):
     accuracy = 0.
     template = raw_data[train, :]
     template_ids = raw_data_ids[train]
-    
+
     # Remove outliers from training data
-    template, template_ids = ods.remove_outliers(template, template_ids)
+    #template, template_ids = ods.remove_outliers(template, template_ids)
 
     # Scale data
     template = scaler.fit_transform(template)
@@ -108,7 +112,7 @@ for train, test in kf.split(raw_data, raw_data_ids):
 
     # DEBUG
     print('Fold accuracy: ' + str(accuracy / len(test)))        
-    total_accuracy += accuracy / len(test)  
+    total_accuracy += accuracy / len(test)
 
 # Plot results
 total_accuracy = total_accuracy / k_folds
