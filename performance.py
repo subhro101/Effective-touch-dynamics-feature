@@ -1,6 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+IMAGE_OUTPUT = "./RESULTS/IMAGES/"
+DATA_OUTPUT = "./RESULTS/"
+
 def dprime(gen_scores, imp_scores):
     x = np.sqrt(2) * abs(np.mean(gen_scores) - np.mean(imp_scores))
     y = np.sqrt(np.power(np.std(gen_scores),2) + np.power(np.std(imp_scores),2))
@@ -16,12 +19,14 @@ def plot_scoreDist(gen_scores, imp_scores):
     dp = dprime(gen_scores, imp_scores)
     plt.xlim([0,1])
     plt.title('Score Distribution (d-prime= %.2f)' % dp)
+    plt.savefig(IMAGE_OUTPUT + 'score_dist.png', bbox_inches='tight')
     plt.show()
     return
 
 def plot_det(far, frr):
     #compute eer
     far_minus_frr = 1
+    eer = 0
     for i, j in zip(far, frr):
         if abs(i-j) < far_minus_frr:
             eer = i
@@ -32,6 +37,7 @@ def plot_det(far, frr):
     plt.xlabel('false accept rate')
     plt.ylabel('false reject rate')
     plt.title('DET Curve (eer = %.2f)' % eer)
+    plt.savefig(IMAGE_OUTPUT + 'det.png', bbox_inches='tight')
     plt.show()
     return
 
@@ -41,6 +47,7 @@ def plot_roc(far, tpr):
     plt.xlabel('false accept rate')
     plt.ylabel('true accept rate')
     plt.title('ROC Curve')
+    plt.savefig(IMAGE_OUTPUT + 'roc.png', bbox_inches='tight')
     plt.show()
     return
 
@@ -70,4 +77,5 @@ def perf_main(gen_scores, imp_scores):
         tpr.append(tp / (tp + fn))
     plot_roc(far, tpr)
     plot_det(far, frr)
+    # WRITE RATES TO FILE
     

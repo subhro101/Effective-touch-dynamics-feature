@@ -25,7 +25,7 @@ import outlier_detection_system as ods
 train_percent = .75
 dataset_path = "dataset1/data/"
 k_folds = 5
-k_neighbors = 15
+k_neighbors = 25
 
 ## Load the dataset
 raw_data = []
@@ -94,7 +94,6 @@ for train, test in kf.split(raw_data, raw_data_ids):
         query = raw_data[test[test_index], :].reshape(1, -1)
         query = scaler.fit_transform(query)
         query_label = raw_data_ids[test[test_index]]
-        print(query_label)
 
         # Predict and record
         prediction = clf.predict(query)
