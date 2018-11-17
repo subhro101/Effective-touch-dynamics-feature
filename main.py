@@ -14,7 +14,7 @@ from performance import perf_main
 ## Import the 5 feature selection algorithms
 import varience_threshold as vt
 import pca_features as pca
-import minimum_subset as ms
+import recursive_features as rf
 import chi_square as cs
 import information_gain as ig
 
@@ -37,35 +37,31 @@ for f in files:
     raw_data.append(temp)
     raw_data_ids.extend([ids]*len(temp.index))    
     ids += 1
-    if ids == 3:
-        break
+    if ids == 3:                                            #### REMOVE THIS WHEN NOT DEBUGGING
+        break                                               #### REMOVE THIS WHEN NOT DEBUGGING
 raw_data = pd.concat(raw_data, axis=0).values
 raw_data_ids = np.array(raw_data_ids)
-
-stat, p, dof, expected = cs.chi_square(raw_data)
-
 print("Total number of raw rows: ", len(raw_data))
 
 ## Perform feature selection
-# varience_threshold_features = []
-# pca_threshold_features = []
-# minimum_subset_features = []
+# varience_threshold_features = vt.get_features(raw_data, raw_data_ids)                         #### TO BE DONE
+# pca_threshold_features = pca.get_features(raw_data, raw_data_ids)                             #### TO BE DONE
+recusive_features = rf.get_features(raw_data, raw_data_ids)
+chi_square_features = cs.get_features(raw_data, raw_data_ids)
+# information_gain_features = ig.get_features(raw_data, raw_data_ids)                           #### TO BE DONE
 
-# dataType is ndarray
-chi_square_features = expected
-# information_gain_features = []
+## Take the intersection of the features
+features = set(chi_square_features).intersection(recusive_features)
+# features = features.intersection(minimum_subset_features)                                     #### TO BE DONE
+# features = features.intersection(chi_square_features)                                         #### TO BE DONE
+# features = features.intersection(information_gain_features)                                   #### TO BE DONE
 
-# # Take the intersection of the features
-# features = set(varience_threshold_features).intersection(pca_threshold_features)
-# features = features.intersection(minimum_subset_features)
-# features = features.intersection(chi_square_features)
-# features = features.intersection(information_gain_features)
-
-# # Remove the unused features from raw_data
-
+## Remove the unused features from raw_data
+for i in reversed(range(len(raw_data[0]))):
+    if i not in features:
+        raw_data= np.delete(raw_data, i, 1)
+    
 ## Perform cross validation
-
-# Instantiate scikit clfs
 kf = KFold(n_splits=k_folds, shuffle=True)
 scaler = MinMaxScaler()
 clf = KNeighborsClassifier(n_neighbors=k_neighbors)
@@ -83,7 +79,7 @@ for train, test in kf.split(raw_data, raw_data_ids):
     template_ids = raw_data_ids[train]
 
     # Remove outliers from training data
-    #template, template_ids = ods.remove_outliers(template, template_ids)
+    template, template_ids = ods.remove_outliers(template, template_ids)
 
     # Scale data
     template = scaler.fit_transform(template)
@@ -120,6 +116,7 @@ print(genuine_scores[0])
 print(total_accuracy)
 print(genuine_scores)
 print(impostor_scores)
+
 # Record/Output Data
 # Courtesy of Dr. Tempest Neil
 perf_main(genuine_scores, impostor_scores)

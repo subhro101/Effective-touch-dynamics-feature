@@ -1,8 +1,7 @@
-# File for the infomration gain feature selection algorithm
-# https://www.python-course.eu/Decision_Trees.php
+# File for the information gain feature selection algorithm
 import numpy as np
 
-
+# The function which will be called
 def information_gain(data, split_attribute_name, target_name="class"):
 
     """
