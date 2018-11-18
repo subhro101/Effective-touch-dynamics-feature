@@ -25,5 +25,5 @@ def get_features(raw_data, raw_data_ids):
         index += 1
 
     # return
-    print("RECUSRIVE FEATURE ELIMINATION: Suggesting: ", sel.n_features_, " columns out of ", (len(raw_data[0])))
+    print("VERIENCE THESHOLD: Suggesting: ", sel.n_features_, " columns out of ", (len(raw_data[0])))
     return return_columns

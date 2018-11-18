@@ -29,4 +29,5 @@ def get_features(raw_data, raw_ids, average_threshold=0.5):
             if avg > average_threshold and column != "person":
                 return_columns.append(column)
 
+    print("INFORMATION GAIN: Suggesting: ", len(return_columns), " columns out of ", (len(raw_data[0])))
     return return_columns
