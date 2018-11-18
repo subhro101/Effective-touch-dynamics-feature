@@ -48,13 +48,13 @@ print("Total number of raw rows: ", len(raw_data))
 # pca_threshold_features = pca.get_features(raw_data, raw_data_ids)                             #### TO BE DONE
 recusive_features = rf.get_features(raw_data, raw_data_ids)
 chi_square_features = cs.get_features(raw_data, raw_data_ids)
-# information_gain_features = ig.get_features(raw_data, raw_data_ids)                           #### TO BE DONE
+information_gain_features = ig.get_features(raw_data, raw_data_ids)
 
 ## Take the intersection of the features
 features = set(chi_square_features).intersection(recusive_features)
 # features = features.intersection(minimum_subset_features)                                     #### TO BE DONE
 # features = features.intersection(chi_square_features)                                         #### TO BE DONE
-# features = features.intersection(information_gain_features)                                   #### TO BE DONE
+features = features.intersection(information_gain_features)
 
 ## Remove the unused features from raw_data
 for i in reversed(range(len(raw_data[0]))):
