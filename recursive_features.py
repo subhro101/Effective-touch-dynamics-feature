@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # The function which will be called
-def get_features(raw_data, raw_data_ids):
+def get_features(raw_data, raw_data_ids, debug=1):
     '''
     Performs feature selection using recursive feature
     elimination. Returns the ideal columns of size the number
@@ -26,10 +26,19 @@ def get_features(raw_data, raw_data_ids):
     return_columns = []
     index = 0
     for feature in eliminator.support_:
-    	if feature:
-    		return_columns.append(index)
-    	index += 1
+        if feature:
+            return_columns.append(index)
+        index += 1
+
+    # DEBUG
+    if debug == 1:
+        plt.figure()
+        plt.xlabel("Number of features selected")
+        plt.ylabel("Cross validation score (nb of correct classifications)")
+        plt.plot(range(1, len(eliminator.grid_scores_) + 1), eliminator.grid_scores_)
+        plt.savefig('./RESULTS/IMAGES/recursive_feature_importance.png', bbox_inches='tight')
+        plt.show()
 
     # return
-    print("RECUSRIVE FEATURE ELIMINATION: Suggesting: ", eliminator.n_features_, " columns out of ", (len(raw_data[0]))) 
+    print("RECUSRIVE FEATURE ELIMINATION: Suggesting: ", eliminator.n_features_, " columns out of ", (len(raw_data.columns))) 
     return return_columns

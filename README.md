@@ -3,9 +3,11 @@ Collaborators - Subhrajyoti Pradhan
 				Ryan Arjun
 
 ## What needs to be Done? and its difficulty
-1. Modify the information gain function to work like chi_squared.get_features()		[????]
-2. Please test the implement variance threshold feature selection 									[EASY]
-3. Implement pca feature selection													[MED]
-4. Figure out why our accuracy is terribly wrong?									[????]
-5. Save performance to file and charts to pictures									[EASY]
-6. Make validation.py, when everything else is fixed								[EASY]
+1. Save performance to file and charts to pictures									[EASY]
+	- plot feature importance for tree selection									[✔]
+	- plot feature importance for recursive selection								[✔]
+	- plot feature importance for variance threshold								[EASY]
+	- plot feature importance for information gain									[EASY]
+	- plot feature importance for chi squared										[EASY]
+	- plot anything else???															[????]
+2. Make validation.py, when everything else is fixed								[EASY]
