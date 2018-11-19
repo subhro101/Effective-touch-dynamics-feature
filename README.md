@@ -13,3 +13,4 @@ Collaborators - Subhrajyoti Pradhan
 	-plot ROC[EASY]
 	- plot anything else???															[????]
 2. Make validation.py, when everything else is fixed								[EASY]
+3. We do not need to work anymore on the recursive stuff. We just need to elaborately talk about it. 
