@@ -136,5 +136,16 @@ for train, test in kf.split(raw_data, raw_data_ids):
 total_accuracy = total_accuracy / k_folds
 
 # Record/Output Data
+# Note which features were selected and total accuracy
+f = open("./RESULTS/results.txt", 'a+')
+index = 0
+f.write("-" * 25 + "\nfeatures Selected:\n")
+for i in raw_data.columns:
+    f.write(str(index) + ": " + i + "\n")
+    index += 1
+f.write("Total accuracy: " + str(total_accuracy) + "\n")
+f.write("-" * 25 + "\n\n")
+f.close()
+
 # Courtesy of Dr. Tempest Neil
 perf_main(genuine_scores, impostor_scores)

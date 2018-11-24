@@ -1,0 +1,120 @@
+-------------------------
+features Selected:
+0: Hold i
+1: Hold Shift
+2: Hold Caps
+3: Hold a
+4: Hold n
+5: Hold l
+Total accuracy: 0.7189247311827958
+-------------------------
+
+-------------------------
+features Selected:
+0: Hold i
+1: Hold Caps
+2: Hold a
+Total accuracy: 0.6410752688172043
+-------------------------
+
+-------------------------
+features Selected:
+0: Hold i
+1: Hold Shift
+2: Hold Caps
+3: Hold a
+4: Hold n
+Total accuracy: 0.7258064516129032
+-------------------------
+
+-------------------------
+features Selected:
+0: Hold .
+1: Hold i
+2: Hold Shift
+3: Hold Caps
+4: Hold o
+5: Hold a
+6: Hold n
+7: Hold l
+8: UD Caps.r
+9: AvH
+Total accuracy: 0.3331182795698925
+-------------------------
+
+-------------------------
+features Selected:
+0: Hold i
+1: Hold Caps
+2: Hold a
+Total accuracy: 0.6535483870967742
+-------------------------
+
+-------------------------
+features Selected:
+0: Hold i
+1: Hold Caps
+2: Hold a
+Total accuracy: 0.6479569892473117
+-------------------------
+
+-------------------------
+features Selected:
+0: Hold i
+1: Hold Shift
+2: Hold Caps
+3: Hold a
+4: Hold n
+5: Hold l
+Total accuracy: 0.7006451612903225
+-------------------------
+
+-------------------------
+features Selected:
+0: Hold i
+1: Hold Caps
+2: Hold a
+Total accuracy: 0.6464516129032258
+-------------------------
+
+-------------------------
+features Selected:
+0: Hold i
+1: Hold Shift
+2: Hold Caps
+3: Hold a
+4: Hold n
+Total accuracy: 0.7247311827956988
+-------------------------
+
+-------------------------
+features Selected:
+0: Hold i
+1: Hold Shift
+2: Hold Caps
+3: Hold a
+4: Hold n
+5: Hold l
+Total accuracy: 0.7193548387096774
+-------------------------
+
+-------------------------
+features Selected:
+0: Hold i
+1: Hold Shift
+2: Hold Caps
+3: Hold a
+4: Hold n
+5: Hold l
+Total accuracy: 0.7058064516129032
+-------------------------
+
+-------------------------
+features Selected:
+0: Hold i
+1: Hold Caps
+2: Hold a
+3: Hold n
+Total accuracy: 0.6608602150537635
+-------------------------
+
