@@ -22,7 +22,6 @@ import outlier_detection_system as ods
 
 ## GLobal Variables
 debug = 0                                                     
-train_percent = .75
 dataset_path = "dataset1/data/"
 k_folds = 5
 k_neighbors = 81

@@ -2,11 +2,12 @@
 from sklearn.feature_selection import RFECV
 from sklearn.model_selection import StratifiedKFold
 from sklearn.svm import SVC
+from sklearn.linear_model import SGDClassifier
 import matplotlib.pyplot as plt
 import numpy as np
 
 # The function which will be called
-def get_features(raw_data, raw_data_ids, debug=1, sample=500):
+def get_features(raw_data, raw_data_ids, debug=1):
     '''
     Performs feature selection using recursive feature
     elimination. Returns the ideal columns of size the number
@@ -14,19 +15,16 @@ def get_features(raw_data, raw_data_ids, debug=1, sample=500):
     '''
 
     # Define our estimator as a support vector machine
-    svm = SVC(kernel="linear")
-
-    # Take a sample if dataset is too big otherwise this takes too long
-    if len(raw_data) > sample:
-        print("\tTaking random sample of ", sample, " rows")
-        raw_data['person'] = raw_data_ids
-        raw_data = raw_data.sample(sample)
-        raw_data_ids = raw_data['person']
-        raw_data = raw_data.drop(columns="person", axis=1)
+    ls = SGDClassifier(max_iter=1000)
 
     # instantiate our eliminator
-    eliminator = RFECV(estimator=svm, cv=StratifiedKFold(n_splits=2, shuffle=True), scoring='accuracy')
+    eliminator = RFECV(estimator=ls, cv=StratifiedKFold(n_splits=2, shuffle=True), scoring='accuracy')
     eliminator.fit(raw_data, raw_data_ids)
+
+    # Check if just one feature left, try again if so
+    while 3 > len(eliminator.support_):
+        eliminator.fit(raw_data, raw_data_ids)
+        print("Running again")
 
     # Set aside correct columns
     return_columns = []

@@ -8,6 +8,7 @@ import pandas as pd
 from sklearn.model_selection import KFold
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn import preprocessing
 from performance import perf_main
 
 ## Import the 5 feature selection algorithms
@@ -21,14 +22,14 @@ import information_gain as ig
 import outlier_detection_system as ods
 
 ## GLobal Variables
-debug = 1                                                       #### SET TO 0 WHEN NOT DEBUGGING
-train_percent = .75
+debug = 0
+subset_size = 2000
 dataset_path = "dataset2/evoline1/"
 k_folds = 5
 k_neighbors = 30
-headers = ['UserId', 'DeviceId', 'SessionId', 'Key', 'DownTime', 'UpTime',
-'Pressure', 'FingerArea', 'RawX', 'RawY', 'gravityX', 'gravityY', 'gravityZ',
-'Hands', 'PasswordType', 'Repetition']
+headers = ['UserId', ' DeviceId', ' SessionId', ' Key', ' DownTime', ' UpTime',
+ 'Pressure', ' FingerArea', ' RawX', ' RawY', ' gravityX', ' gravityY', ' gravityZ',
+' Hands', ' PasswordType', ' Repetition']
 
 ## Load the dataset
 raw_data = pd.DataFrame(columns=headers, data=[])
@@ -37,35 +38,50 @@ ids = 0
 temp_list = []
 files = os.listdir(dataset_path)
 for f in files:
-    temp = pd.read_csv(dataset_path + f, names=headers)
-    temp_list.append(temp)
-    raw_data_ids.extend([ids]*len(temp.index))    
-    ids += 1
-    if debug == 1 and ids == 3:
-        break
+    temp = pd.read_csv(dataset_path + f)
+    temp_list.append(temp) 
 
 raw_data = pd.concat(temp_list)
 
-# Remove columns DEVICEID as it is constant and not necessary for the learning
-raw_data = raw_data.drop(columns="DeviceId", axis=1)
+# If dataset is too big acquire a subset
+if len(raw_data) > subset_size:
+    raw_data = raw_data.sample(subset_size)
 
+# Perform Label Encoding
+le = preprocessing.LabelEncoder()
+raw_data_ids = raw_data['UserId']
+raw_data_ids= le.fit_transform(raw_data_ids)
+raw_data = raw_data.drop(columns="UserId", axis=1)
+raw_data[' DeviceId'] = le.fit_transform(raw_data[' DeviceId'])
+raw_data[' Key'] = le.fit_transform(raw_data[' Key'])
 raw_data = raw_data.astype(np.float64)
 raw_data_ids = np.array(raw_data_ids)
 print("Total number of raw rows: ", len(raw_data))
-sys.exit(1)
 
 ## Perform feature selection
-varience_threshold_features = vt.get_features(raw_data, raw_data_ids)
-tree_selection_features = tsf.get_features(raw_data, raw_data_ids, debug=0)
-recusive_features = rf.get_features(raw_data, raw_data_ids, debug=0)
-chi_square_features = cs.get_features(raw_data, raw_data_ids)
-information_gain_features = ig.get_features(raw_data, raw_data_ids)
+def get_set_of_features():
+    varience_threshold_features = vt.get_features(raw_data, raw_data_ids)
+    tree_selection_features = tsf.get_features(raw_data, raw_data_ids, debug=debug)
+    recusive_features = rf.get_features(raw_data, raw_data_ids, debug=debug)
+    chi_square_features = cs.get_features(raw_data, raw_data_ids)
+    information_gain_features = ig.get_features(raw_data, raw_data_ids)
 
-## Take the intersection of the features
-features = set(chi_square_features).intersection(recusive_features)
-features = features.intersection(varience_threshold_features)
-features = features.intersection(tree_selection_features)
-features = features.intersection(information_gain_features)
+    ## Take the intersection of the features
+    features = set(chi_square_features).intersection(recusive_features)
+    features = features.intersection(varience_threshold_features)
+    features = features.intersection(tree_selection_features)
+    features = features.intersection(information_gain_features)
+    return features
+
+# Check if less than two features selected, if so run again
+features = get_set_of_features()
+index = 2
+while len(features) < 2:
+    print("FAILED at finding intersecting features, trying again, iteration=", index)
+    features = get_set_of_features()
+    print("New len, ", len(features))
+    index += 1
+
 
 ## Remove the unused features from raw_data
 for i in reversed(range(len(raw_data.columns))):
@@ -144,4 +160,4 @@ f.write("-" * 25 + "\n\n")
 f.close()
 
 # Courtesy of Dr. Tempest Neil
-#perf_main(genuine_scores, impostor_scores)
+perf_main(genuine_scores, impostor_scores, name="_" + dataset_path)
