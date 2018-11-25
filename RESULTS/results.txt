@@ -148,3 +148,157 @@ features Selected:
 Total accuracy: 0.0560199870182357
 -------------------------
 
+RUN WIth all FEATURES  For a BASELINE
+
+-------------------------
+features Selected:
+0: Hold .
+1: Hold t
+2: Hold i
+3: Hold e
+4: Hold Shift
+5: Hold 5
+6: Hold Shift.1
+7: Hold Caps
+8: Hold r
+9: Hold o
+10: Hold a
+11: Hold n
+12: Hold l
+13: Hold Enter
+14: DD ..t
+15: DD t.i
+16: DD i.e
+17: DD e.Shift
+18: DD Shift.5
+19: DD 5.Shift
+20: DD Shift.Caps
+21: DD Caps.r
+22: DD r.o
+23: DD o.a
+24: DD a.n
+25: DD n.l
+26: DD l.Enter
+27: UD ..t
+28: UD t.i
+29: UD i.e
+30: UD e.Shift
+31: UD Shift.5
+32: UD 5.Shift
+33: UD Shift.Caps
+34: UD Caps.r
+35: UD r.o
+36: UD o.a
+37: UD a.n
+38: UD n.l
+39: UD l.Enter
+40: Pressure .
+41: Pressure t
+42: Pressure i
+43: Pressure e
+44: Pressure Shift
+45: Pressure 5
+46: Pressure Shift.1
+47: Pressure Caps
+48: Pressure r
+49: Pressure o
+50: Pressure a
+51: Pressure n
+52: Pressure l
+53: Pressure Enter
+54: Size .
+55: Size t
+56: Size i
+57: Size e
+58: Size Shift
+59: Size 5
+60: Size Shift.1
+61: Size Caps
+62: Size r
+63: Size o
+64: Size a
+65: Size n
+66: Size l
+67: Size Enter
+68: AvH
+69: AvP
+70: AvA
+Total accuracy: 0.0199564008671
+-------------------------
+
+-------------------------
+features Selected:
+0: Hold .
+1: Hold t
+2: Hold i
+3: Hold e
+4: Hold Shift
+5: Hold 5
+6: Hold Shift.1
+7: Hold Caps
+8: Hold r
+9: Hold o
+10: Hold a
+11: Hold n
+12: Hold l
+13: Hold Enter
+14: DD ..t
+15: DD t.i
+16: DD i.e
+17: DD e.Shift
+18: DD Shift.5
+19: DD 5.Shift
+20: DD Shift.Caps
+21: DD Caps.r
+22: DD r.o
+23: DD o.a
+24: DD a.n
+25: DD n.l
+26: DD l.Enter
+27: UD ..t
+28: UD t.i
+29: UD i.e
+30: UD e.Shift
+31: UD Shift.5
+32: UD 5.Shift
+33: UD Shift.Caps
+34: UD Caps.r
+35: UD r.o
+36: UD o.a
+37: UD a.n
+38: UD n.l
+39: UD l.Enter
+40: Pressure .
+41: Pressure t
+42: Pressure i
+43: Pressure e
+44: Pressure Shift
+45: Pressure 5
+46: Pressure Shift.1
+47: Pressure Caps
+48: Pressure r
+49: Pressure o
+50: Pressure a
+51: Pressure n
+52: Pressure l
+53: Pressure Enter
+54: Size .
+55: Size t
+56: Size i
+57: Size e
+58: Size Shift
+59: Size 5
+60: Size Shift.1
+61: Size Caps
+62: Size r
+63: Size o
+64: Size a
+65: Size n
+66: Size l
+67: Size Enter
+68: AvH
+69: AvP
+70: AvA
+Total accuracy: 0.0199576255618
+-------------------------
+

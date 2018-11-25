@@ -58,23 +58,23 @@ raw_data_ids = np.array(raw_data_ids)
 print("Total number of raw rows: ", len(raw_data))
 
 ## Perform feature selection
-varience_threshold_features = vt.get_features(raw_data, raw_data_ids)
-tree_selection_features = tsf.get_features(raw_data, raw_data_ids, debug=0)
-recusive_features = rf.get_features(raw_data, raw_data_ids, debug=0)
-chi_square_features = cs.get_features(raw_data, raw_data_ids)
-information_gain_features = ig.get_features(raw_data, raw_data_ids)
+#varience_threshold_features = vt.get_features(raw_data, raw_data_ids)
+#tree_selection_features = tsf.get_features(raw_data, raw_data_ids, debug=0)
+#recusive_features = rf.get_features(raw_data, raw_data_ids, debug=0)
+#chi_square_features = cs.get_features(raw_data, raw_data_ids)
+#information_gain_features = ig.get_features(raw_data, raw_data_ids)
 
 ## Take the intersection of the features
-features = set(chi_square_features).intersection(recusive_features)
-features = features.intersection(varience_threshold_features)
-features = features.intersection(tree_selection_features)
-features = features.intersection(information_gain_features)
+#features = set(chi_square_features).intersection(recusive_features)
+#features = features.intersection(varience_threshold_features)
+#features = features.intersection(tree_selection_features)
+#features = features.intersection(information_gain_features)
 
 ## Remove the unused features from raw_data
-for i in reversed(range(len(raw_data.columns))):
-    if i not in features:
-        col = raw_data.columns[i]
-        raw_data = raw_data.drop(columns=col, axis=1)
+#for i in reversed(range(len(raw_data.columns))):
+#    if i not in features:
+#        col = raw_data.columns[i]
+#        raw_data = raw_data.drop(columns=col, axis=1)
 print("Remaining number post intersection: ", len(raw_data.columns), " columns")
     
 ## Perform cross validation

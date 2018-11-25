@@ -52,7 +52,8 @@ def plot_roc(far, tpr):
     return
 
 def perf_main(gen_scores, imp_scores, name=""):
-    IMAGE_OUTPUT = IMAGE_OUTPUT + name
+    global IMAGE_OUTPUT
+    IMAGE_OUPUT = IMAGE_OUTPUT + name
 
     plot_scoreDist(gen_scores, imp_scores)
     thresholds = np.linspace(0, 1, 200)
