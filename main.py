@@ -21,11 +21,11 @@ import information_gain as ig
 import outlier_detection_system as ods
 
 ## GLobal Variables
-debug = 1                                                       #### SET TO 0 WHEN NOT DEBUGGING
+debug = 0                                                     
 train_percent = .75
 dataset_path = "dataset1/data/"
 k_folds = 5
-k_neighbors = 30
+k_neighbors = 81
 headers = ['Hold .', 'Hold t', 'Hold i', 'Hold e', 'Hold Shift',
 'Hold 5', 'Hold Shift.1', 'Hold Caps', 'Hold r', 'Hold o', 'Hold a',
 'Hold n', 'Hold l', 'Hold Enter', 'DD ..t', 'DD t.i', 'DD i.e',
