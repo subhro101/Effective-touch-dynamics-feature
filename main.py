@@ -21,10 +21,10 @@ import information_gain as ig
 import outlier_detection_system as ods
 
 ## GLobal Variables
-debug = 0                                                     
+debug = 1                                                    
 dataset_path = "dataset1/data/"
 k_folds = 5
-k_neighbors = 81
+k_neighbors = 7
 headers = ['Hold .', 'Hold t', 'Hold i', 'Hold e', 'Hold Shift',
 'Hold 5', 'Hold Shift.1', 'Hold Caps', 'Hold r', 'Hold o', 'Hold a',
 'Hold n', 'Hold l', 'Hold Enter', 'DD ..t', 'DD t.i', 'DD i.e',
@@ -50,17 +50,18 @@ for f in files:
     temp_list.append(temp)
     raw_data_ids.extend([ids]*len(temp.index))    
     ids += 1
-    if debug == 1 and ids == 3:
+    if debug == 1 and ids == 15:
         break
 raw_data = pd.concat(temp_list)
 raw_data = raw_data.astype(np.float64)
 raw_data_ids = np.array(raw_data_ids)
 print("Total number of raw rows: ", len(raw_data))
+print("Total number of users: ", len(files))
 
 ## Perform feature selection
 varience_threshold_features = vt.get_features(raw_data, raw_data_ids)
-tree_selection_features = tsf.get_features(raw_data, raw_data_ids, debug=0)
-recusive_features = rf.get_features(raw_data, raw_data_ids, debug=0)
+tree_selection_features = tsf.get_features(raw_data, raw_data_ids, debug=debug)
+recusive_features = rf.get_features(raw_data, raw_data_ids, debug=debug)
 chi_square_features = cs.get_features(raw_data, raw_data_ids)
 information_gain_features = ig.get_features(raw_data, raw_data_ids)
 
@@ -116,13 +117,14 @@ for train, test in kf.split(raw_data, raw_data_ids):
         # Predict
         prediction = clf.predict(query)
         confidence = clf.predict_proba(query)
+        confidence = max(confidence)
 
         # Record
         if prediction[0] == query_label:
             accuracy += 1
-            genuine_scores.append(confidence[0][prediction[0]])
+            genuine_scores.append(confidence)
         else:
-            impostor_scores.append(confidence[0][prediction[0]])
+            impostor_scores.append(confidence)
 
     # DEBUG
     if debug == 1:

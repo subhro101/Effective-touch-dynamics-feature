@@ -18,6 +18,10 @@ def get_features(raw_data, raw_ids, alpha=0.15):
 	return_columns = []
 	index = 0
 	for column in df:
+		# dont check person column
+		if column == "person":
+			continue
+
 		# Calculate statistics
 		X = df[column].astype(str)
 		Y = df["person"].astype(str)
@@ -25,7 +29,7 @@ def get_features(raw_data, raw_ids, alpha=0.15):
 		chi2, p, dof, expected = chi2_contingency(df_observed.values)
 
 		# Decide to keep column
-		if p < alpha and column != "person":
+		if p < alpha:
 			return_columns.append(index)
 
 		# update index

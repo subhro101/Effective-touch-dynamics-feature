@@ -302,3 +302,16 @@ features Selected:
 Total accuracy: 0.0199576255618
 -------------------------
 
+-------------------------
+features Selected:
+0: Hold a
+1: DD t.i
+2: DD o.a
+3: DD a.n
+4: UD t.i
+5: UD o.a
+6: UD a.n
+7: AvH
+Total accuracy: 0.10098039215686275
+-------------------------
+
