@@ -1,16 +1,19 @@
-Collaborators - Subhrajyoti Pradhan
-				Carlos Leon
-				Ryan Arjun
+Initial Project Collaborators - Subhrajyoti Pradhan, Carlos Leon, Ryan Arjun
+Further Research Collaborators - Subhrajyoti Pradhan, Carlos Leon
 
-## What needs to be Done? and its difficulty
-1. Save performance to file and charts to pictures									[EASY]
-	- plot feature importance for tree selection									[✔]
-	- plot feature importance for recursive selection								[✔]
-	- plot feature importance for variance threshold								[EASY]
-	- plot feature importance for information gain									[EASY]
-	- plot feature importance for chi squared
-	-plot DET
-	-plot ROC[EASY]
-	- plot anything else???															[????]
-2. Make validation.py, when everything else is fixed								[EASY]
-3. We do not need to work anymore on the recursive stuff. We just need to elaborately talk about it. 
+Further Advancements:
+
+- Improve Running Conditions
+	- Change settings for k as cmd arg
+	- Change each feature algo as cmd arg
+	- Multiple runs in batch as cmd args
+
+- Improve Accuracy
+	- With/Without outlier detection
+	- Better values for k
+
+- Improve Visibility
+	- Clean up Github
+	- Put summarized version of paper on README.md
+		- and replicatable instructions
+	- Compare to Related Works

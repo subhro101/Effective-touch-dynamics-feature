@@ -21,10 +21,9 @@ import information_gain as ig
 import outlier_detection_system as ods
 
 ## GLobal Variables
-debug = 0                                                     
+debug = ""                                                     
 dataset_path = "dataset1/data/"
 k_folds = 5
-k_neighbors = 81
 headers = ['Hold .', 'Hold t', 'Hold i', 'Hold e', 'Hold Shift',
 'Hold 5', 'Hold Shift.1', 'Hold Caps', 'Hold r', 'Hold o', 'Hold a',
 'Hold n', 'Hold l', 'Hold Enter', 'DD ..t', 'DD t.i', 'DD i.e',
@@ -39,6 +38,24 @@ headers = ['Hold .', 'Hold t', 'Hold i', 'Hold e', 'Hold Shift',
 'Size 5', 'Size Shift.1', 'Size Caps', 'Size r', 'Size o', 'Size a',
 'Size n', 'Size l', 'Size Enter', 'AvH', 'AvP', 'AvA']
 
+## Read in command line arguments
+if len(sys.argv) != 9:
+    print("Please enter commands as such\n./main.py number_of_runs(integer) K(integer) use_outlier_detection(boolean)")
+    print("use_varience_threshold(boolean), use_chi_squared(boolean), use_recursive_feature_elimination(boolean), use_random_forest_feature_selection(boolean)")
+    print("use_mutual_information(boolean)")
+    print("ex) ./main.py 3 12 true true false true false true")
+    sys.exit(1)
+
+debug += "The arguments are: " + str(sys.argv) + "\n"
+_number_of_runs = sys.argv[1]
+_k_value = sys.argv[2]
+_use_outliers_ = sys.argv[3]
+_use_varience_algo_ = sys.argv[4]
+_use_chi_algo = sys.argv[5]
+_use_recursive_algo_ = sys.argv[6]
+_use_tree_algo_ = sys.argv[7]
+_use_info_algo = sys.argv[8]
+
 ## Load the dataset
 raw_data = pd.DataFrame(columns=headers, data=[])
 raw_data_ids = []
@@ -50,12 +67,14 @@ for f in files:
     temp_list.append(temp)
     raw_data_ids.extend([ids]*len(temp.index))    
     ids += 1
-    if debug == 1 and ids == 3:
-        break
 raw_data = pd.concat(temp_list)
 raw_data = raw_data.astype(np.float64)
 raw_data_ids = np.array(raw_data_ids)
-print("Total number of raw rows: ", len(raw_data))
+debug += "Total number of raw rows: " + str(len(raw_data)) + "\n"
+
+## Start loop of runs
+for i in range(_number_of_runs):
+    # Move outside stuff in here
 
 ## Perform feature selection
 varience_threshold_features = vt.get_features(raw_data, raw_data_ids)
@@ -75,7 +94,7 @@ for i in reversed(range(len(raw_data.columns))):
    if i not in features:
        col = raw_data.columns[i]
        raw_data = raw_data.drop(columns=col, axis=1)
-print("Remaining number post intersection: ", len(raw_data.columns), " columns")
+debug += "Remaining number post intersection: " + str(len(raw_data.columns) + " columns\n")
     
 ## Perform cross validation
 kf = KFold(n_splits=k_folds, shuffle=True)
@@ -124,9 +143,8 @@ for train, test in kf.split(raw_data, raw_data_ids):
         else:
             impostor_scores.append(confidence[0][prediction[0]])
 
-    # DEBUG
-    if debug == 1:
-        print('Fold accuracy: ' + str(accuracy / len(test))) 
+    
+    debug += 'Fold accuracy: ' + str(accuracy / len(test)) + "\n" 
             
     # record accuracy over fold
     total_accuracy += accuracy / len(test)
@@ -135,16 +153,17 @@ for train, test in kf.split(raw_data, raw_data_ids):
 total_accuracy = total_accuracy / k_folds
 
 # Record/Output Data
+# Courtesy of Dr. Tempest Neil
+perf_main(genuine_scores, impostor_scores)
+
 # Note which features were selected and total accuracy
 f = open("./RESULTS/results.txt", 'a+')
 index = 0
-f.write("-" * 25 + "\nfeatures Selected:\n")
+debug += "-" * 25 + "\nfeatures Selected:\n"
 for i in raw_data.columns:
-    f.write(str(index) + ": " + i + "\n")
+    debug += ": " + i + "\n"
     index += 1
-f.write("Total accuracy: " + str(total_accuracy) + "\n")
-f.write("-" * 25 + "\n\n")
+debug += "Total accuracy: " + str(total_accuracy) + "\n"
+debug += "-" * 25 + "\n\n"
+f.write(debug)
 f.close()
-
-# Courtesy of Dr. Tempest Neil
-perf_main(genuine_scores, impostor_scores)
