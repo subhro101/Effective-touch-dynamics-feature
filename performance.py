@@ -13,7 +13,7 @@ def plot_scoreDist(gen_scores, imp_scores):
     plt.figure()
     print(gen_scores)
     print(imp_scores)
-    plt.hist(gen_scores, color='green', lw=2, histtype='step', hatch='//', label='Genuine Scores')
+    plt.hist(gen_scores, color=['green', 'red'], lw=2, histtype='step', hatch='//', label='Genuine Scores')
     plt.hist(imp_scores, color='red', lw=2, histtype='step', hatch='\\', label='Impostor Scores')
     plt.legend(loc='best')
     dp = dprime(gen_scores, imp_scores)

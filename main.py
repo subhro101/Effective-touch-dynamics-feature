@@ -71,6 +71,7 @@ raw_data = pd.concat(temp_list)
 raw_data = raw_data.astype(np.float64)
 raw_data_ids = np.array(raw_data_ids)
 debug += "Total number of raw rows: " + str(len(raw_data)) + "\n"
+debug += "Total number of users: " + str(len(files)) + "\n"
 
 ## Start loop of runs
 for i in range(_number_of_runs):
@@ -78,8 +79,8 @@ for i in range(_number_of_runs):
 
 ## Perform feature selection
 varience_threshold_features = vt.get_features(raw_data, raw_data_ids)
-tree_selection_features = tsf.get_features(raw_data, raw_data_ids, debug=0)
-recusive_features = rf.get_features(raw_data, raw_data_ids, debug=0)
+tree_selection_features = tsf.get_features(raw_data, raw_data_ids, debug=debug)
+recusive_features = rf.get_features(raw_data, raw_data_ids, debug=debug)
 chi_square_features = cs.get_features(raw_data, raw_data_ids)
 information_gain_features = ig.get_features(raw_data, raw_data_ids)
 
@@ -135,13 +136,14 @@ for train, test in kf.split(raw_data, raw_data_ids):
         # Predict
         prediction = clf.predict(query)
         confidence = clf.predict_proba(query)
+        confidence = max(confidence)
 
         # Record
         if prediction[0] == query_label:
             accuracy += 1
-            genuine_scores.append(confidence[0][prediction[0]])
+            genuine_scores.append(confidence)
         else:
-            impostor_scores.append(confidence[0][prediction[0]])
+            impostor_scores.append(confidence)
 
     
     debug += 'Fold accuracy: ' + str(accuracy / len(test)) + "\n" 
