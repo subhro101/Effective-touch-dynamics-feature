@@ -3,7 +3,7 @@ import pandas as pd
 from scipy.stats import chi2_contingency
 
 # The function which will be called
-def get_features(raw_data, raw_ids, alpha=0.15):
+def get_features(raw_data, raw_ids, debug, run, alpha=0.15):
 	'''
 	This function will take in the raw data and the correct label for each row
 	and compute which columns are not needed in predicting the correct person.
@@ -36,5 +36,6 @@ def get_features(raw_data, raw_ids, alpha=0.15):
 		index += 1
 
 	# return
-	print("CHI SQUARED: Suggesting: ", len(return_columns), " columns out of ", (len(df.columns) - 1))
-	return return_columns
+	debug += "Chi Square with alpha: " + str(alpha) + "\n"
+	debug += "CHI SQUARED: Suggesting: " + str(len(return_columns)) + " columns out of " + str((len(df.columns) - 1)) + "\n"
+	return return_columns, debug

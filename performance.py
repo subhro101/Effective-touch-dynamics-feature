@@ -9,21 +9,21 @@ def dprime(gen_scores, imp_scores):
     y = np.sqrt(np.power(np.std(gen_scores),2) + np.power(np.std(imp_scores),2))
     return x / y
 
-def plot_scoreDist(gen_scores, imp_scores):
+def plot_scoreDist(gen_scores, imp_scores, run, show):
     plt.figure()
-    print(gen_scores)
-    print(imp_scores)
     plt.hist(gen_scores, color=['green', 'red'], lw=2, histtype='step', hatch='//', label='Genuine Scores')
     plt.hist(imp_scores, color='red', lw=2, histtype='step', hatch='\\', label='Impostor Scores')
     plt.legend(loc='best')
     dp = dprime(gen_scores, imp_scores)
     plt.xlim([0,1])
     plt.title('Score Distribution (d-prime= %.2f)' % dp)
-    plt.savefig(IMAGE_OUTPUT + 'score_dist.png', bbox_inches='tight')
-    plt.show()
-    return
+    plt.savefig(IMAGE_OUTPUT + 'score_dist_ ' + str(run) + '.png', bbox_inches='tight')
+    
+    # show
+    if show:
+        plt.show()
 
-def plot_det(far, frr):
+def plot_det(far, frr, run, show):
     #compute eer
     far_minus_frr = 1
     eer = 0
@@ -37,25 +37,32 @@ def plot_det(far, frr):
     plt.xlabel('false accept rate')
     plt.ylabel('false reject rate')
     plt.title('DET Curve (eer = %.2f)' % eer)
-    plt.savefig(IMAGE_OUTPUT + 'det.png', bbox_inches='tight')
-    plt.show()
-    return
+    plt.savefig(IMAGE_OUTPUT + 'det_' + str(run) + '.png', bbox_inches='tight')
 
-def plot_roc(far, tpr):
+    # show
+    if show:
+        plt.show()
+
+def plot_roc(far, tpr, run, show):
     plt.figure()
     plt.plot(far, tpr, lw=2)
     plt.xlabel('false accept rate')
     plt.ylabel('true accept rate')
     plt.title('ROC Curve')
-    plt.savefig(IMAGE_OUTPUT + 'roc.png', bbox_inches='tight')
-    plt.show()
-    return
+    plt.savefig(IMAGE_OUTPUT + 'roc_' + str(run) + '.png', bbox_inches='tight')
 
-def perf_main(gen_scores, imp_scores, name=""):
+    # show
+    if show:
+        plt.show()
+
+def perf_main(gen_scores, imp_scores, run, show=True, name=""):
     global IMAGE_OUTPUT
     IMAGE_OUPUT = IMAGE_OUTPUT + name
 
-    plot_scoreDist(gen_scores, imp_scores)
+    # plot score distribution
+    plot_scoreDist(gen_scores, imp_scores, run, show)
+
+    # Separate into square
     thresholds = np.linspace(0, 1, 200)
     far = []
     frr = []
@@ -78,7 +85,11 @@ def perf_main(gen_scores, imp_scores, name=""):
         far.append(fp / (fp + tn))
         frr.append(fn / (fn + tp))
         tpr.append(tp / (tp + fn))
-    plot_roc(far, tpr)
-    plot_det(far, frr)
-    # WRITE RATES TO FILE
+
+    # plot roc and det
+    plot_roc(far, tpr, run, show)
+    plot_det(far, frr, run, show)
+    
+    # return
+    return debug
     

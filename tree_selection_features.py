@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # The function that will be called
-def get_features(raw_data, raw_data_ids, debug=1):
+def get_features(raw_data, raw_data_ids, debug, run, show=True):
     '''
     Uses tree selection to determine feature importance
     then used the avg of the importance to remove unneeded features
@@ -26,19 +26,21 @@ def get_features(raw_data, raw_data_ids, debug=1):
     		return_columns.append(index)
     	index += 1
 
-    # DEBUG
-    if debug == 1 :
-    	importances = clf.feature_importances_
-    	std = np.std([tree.feature_importances_ for tree in clf.estimators_], axis=0)
-    	indices = np.argsort(importances)[::-1]
-    	plt.figure(figsize=(16,8))
-    	plt.title("Feature importances")
-    	plt.bar(range(raw_data.shape[1]), importances[indices], color="r", yerr=std[indices], align="center")
-    	plt.xticks(range(raw_data.shape[1]), indices)
-    	plt.xlim([-1, raw_data.shape[1]])
-    	plt.savefig('./RESULTS/IMAGES/tree_feature_importance.png', bbox_inches='tight')
-    	plt.show()
+    # Save results
+    importances = clf.feature_importances_
+    std = np.std([tree.feature_importances_ for tree in clf.estimators_], axis=0)
+    indices = np.argsort(importances)[::-1]
+    plt.figure(figsize=(16,8))
+    plt.title("Feature importances")
+    plt.bar(range(raw_data.shape[1]), importances[indices], color="r", yerr=std[indices], align="center")
+    plt.xticks(range(raw_data.shape[1]), indices)
+    plt.xlim([-1, raw_data.shape[1]])
+    plt.savefig('./RESULTS/IMAGES/tree_feature_importance' + str(run) + '_.png', bbox_inches='tight')
+
+    # show
+    if show:
+        plt.show()
 
     # return
-    print("TREE BASED SELECTION: Suggesting: ", len(return_columns), " columns out of ", (len(raw_data.columns)))
-    return return_columns
+    debug += "TREE BASED SELECTION: Suggesting: " + str(len(return_columns)) + " columns out of " + str(len(raw_data.columns))
+    return return_columns, debug

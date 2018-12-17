@@ -5,7 +5,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_selection import mutual_info_classif
 
 # The function which will be called
-def get_features(raw_data, raw_ids):
+def get_features(raw_data, raw_ids, debug, run):
 
     """
     Calculate the information gain of a dataset. This function takes three parameters:
@@ -19,7 +19,7 @@ def get_features(raw_data, raw_ids):
     # Get the average of the mutual information of each column
     avg = np.mean(m_info)
 
-    # Set aside correct columns
+    # Set aside columns with more info than avg
     return_columns = []
     index = 0
     for feature in m_info:
@@ -27,6 +27,6 @@ def get_features(raw_data, raw_ids):
             return_columns.append(index)
         index += 1
     
-
-    print("INFORMATION GAIN: Suggesting: ", len(return_columns), " columns out of ", (len(raw_data.columns)))
-    return return_columns
+    debug += "information gain with avg: " + str(avg) + "\n"
+    debug += "INFORMATION GAIN: Suggesting: " + str(len(return_columns)) + " columns out of " + str(len(raw_data.columns)) + "\n"
+    return return_columns, debug

@@ -3,11 +3,6 @@ Further Research Collaborators - Subhrajyoti Pradhan, Carlos Leon
 
 Further Advancements:
 
-- Improve Running Conditions
-	- Change settings for k as cmd arg
-	- Change each feature algo as cmd arg
-	- Multiple runs in batch as cmd args
-
 - Improve Accuracy
 	- With/Without outlier detection
 	- Better values for k

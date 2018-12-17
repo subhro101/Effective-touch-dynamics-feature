@@ -4,7 +4,7 @@
 import numpy as np
 from sklearn.ensemble import IsolationForest
 
-def remove_outliers(template, template_ids):
+def remove_outliers(template, template_ids, debug, run):
 
     # Set variables
     refined_data = []
@@ -34,5 +34,5 @@ def remove_outliers(template, template_ids):
             refined_ids.append(template_ids[leave_out])
             count += 1
 
-    print("Rows Kept: ", count, " out of: ", len(template))
-    return refined_data, refined_ids
+    debug += "Rows Kept: " + str(count) + " out of: " + str(len(template)) + "\n"
+    return refined_data, refined_ids, debug
