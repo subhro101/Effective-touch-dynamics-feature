@@ -37,7 +37,7 @@ def select_k(data, ids, debug, run=0, show=True):
 			kfold = model_selection.KFold(n_splits=10)
 
 			# Acquire scores
-			scores = model_selection.cross_val_score(estimator=knn, x=data, y=ids, cv=kfold, scoring='accuracy', error_score='raise')
+			scores = model_selection.cross_val_score(estimator=knn, X=data, y=ids, cv=kfold, scoring='accuracy', error_score='raise')
 			k_scores.append(scores.mean()*100)
 
 		# Save the metric scores
@@ -58,7 +58,10 @@ def select_k(data, ids, debug, run=0, show=True):
 	plt.title("K Accuracy")
 	index = 0
 	for m in metrics:
+		print("Plotting: ", m, " with ", cv_scores[index])
 		plt.plot(neighbors, cv_scores[index], label=m)
+		index += 1
+	plt.legend()
 
 	# save image
 	plt.savefig(IMAGE_OUTPUT + 'k_accuracy_' + str(run) + '.png', bbox_inches='tight')

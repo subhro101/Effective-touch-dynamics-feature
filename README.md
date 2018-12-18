@@ -1,5 +1,5 @@
-Initial Project Collaborators - Subhrajyoti Pradhan, Carlos Leon, Ryan Arjun
-Further Research Collaborators - Subhrajyoti Pradhan, Carlos Leon
+# Initial Project Collaborators - Subhrajyoti Pradhan, Carlos Leon, Ryan Arjun
+# Further Research Collaborators - Subhrajyoti Pradhan, Carlos Leon
 
 Further Advancements:
 

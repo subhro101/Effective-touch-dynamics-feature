@@ -85,6 +85,7 @@ debug += "Total number of users: " + str(len(files)) + "\n"
 for i in range(_number_of_runs):
     debug += "-" * 25 + "\n"
     debug += "Beginning Run: " + str(i) + "\n"
+    print("Run: ", i, " of ", _number_of_runs)
 
     ## Perform feature selection
     selected_features = []
@@ -130,8 +131,12 @@ for i in range(_number_of_runs):
     genuine_scores = []
     impostor_scores = []
     total_accuracy = 0.
+    counter = 0
 
     for train, test in kf.split(raw_data, raw_data_ids):
+        # debug info
+        print("Fold: ", counter, " Of: ", k_folds)
+
         # Get current folds data
         accuracy = 0.
         template = raw_data.values[train, :]
